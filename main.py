@@ -65,6 +65,7 @@ class App:
             messagebox.showerror("Error","Error al cargar el archivo")
     def analizar(self):
         text = self.text.get("1.0",END)#Imprime por linneas separado por \n, SUSCEPTIBLE A CAMBIOS POR QUE ES CONSOLA
+        print(text[len(text)-1])#el texto siempre termian con un salto de linea
         for a in text:
             self.console.insert(INSERT,">>>"+a+"\n")
         analizar = analizador()
