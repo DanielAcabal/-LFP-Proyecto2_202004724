@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox,filedialog
+from Automata import analizador
 class App:
     def __init__(self,root:tk.Toplevel) -> None:
         #Variables
@@ -29,6 +30,7 @@ class App:
             #Analizar
         editmenu = Menu(menubar, tearoff=0)
         editmenu.add_command(label="Analizar", command=self.analizar)
+        '''        '''
         menubar.add_cascade(label="Analizar Archivo", menu=editmenu)
             #Reportes
         reportMenu = Menu(menubar, tearoff=0)
@@ -63,9 +65,10 @@ class App:
             messagebox.showerror("Error","Error al cargar el archivo")
     def analizar(self):
         text = self.text.get("1.0",END)#Imprime por linneas separado por \n, SUSCEPTIBLE A CAMBIOS POR QUE ES CONSOLA
-        for a in text.split("\n"):
+        for a in text:
             self.console.insert(INSERT,">>>"+a+"\n")
-        print(text)
+        analizar = analizador()
+        analizar.analizar(text)
         messagebox.showwarning("OJO","No hay analizador xd")
     def donothing():
         filewin = tk.Toplevel(root)
