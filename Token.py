@@ -21,3 +21,5 @@ class token:
         return self.__columna
     def setTipo(self,columna):
         self.__columna = columna
+    def mostrar(self):
+        print("["+self.getTipo()+" , "+self.getLexema()+" , "+str(self.getFila())+" , "+str(self.getColumna())+"]")

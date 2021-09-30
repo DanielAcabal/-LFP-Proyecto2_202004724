@@ -1,4 +1,4 @@
-import Token 
+from Token import token
 
 class analizador:
     def __init__(self) -> None:
@@ -7,11 +7,36 @@ class analizador:
         self.__tokens = []
         self.__errores = []
         self.__simbolo = {"=":"igual",";":"PuntoComa","{":"AbreLlave","[":"AbreCorchete","]":"CierraCorchete","}":"CierraLLave",",":"Coma","(":"AbreParen",")":"CierraParen"}
-
-
+        self.__reservada = ["claves","registros","imprimir","imprimirln","conteo","promedio","contarsi","datos","sumar","max","min","exportarReporte"]
+    def getTokens(self):
+        return self.__tokens
+    def getErrores(self):
+        return self.__errores
+    
+    def palabraReservada(self,palabra):
+        for a in self.__reservada:
+            if palabra.lower() == a:
+                return True
+        return False
+    def nuevoToken(self,tipo,lexema,fila,columna):
+        tok = token(tipo,lexema,fila,columna)
+        if tipo!="Error":
+            self.__tokens.append(tok)
+            self.__lexema = ""
+            self.__estado = 0
+        else:
+            self.__errores.append(tok)
+    def mostrarTokens(self):
+        print("--Lista Tokens--")
+        for tok in self.__tokens:
+            tok.mostrar()
+    def mostrarErrores(self):
+        print("--Lista Errores--")
+        for tok in self.__errores:
+            tok.mostrar()
     def analizar(self,entrada):
         i=0
-        fila =0
+        fila =1
         columna =0
         while i < len(entrada):
             actual = entrada[i] #actual ya es un caracter
@@ -56,8 +81,7 @@ class analizador:
                     i+=1
                 else:
                     print("El símbolo: "+actual+" no pertenece al lenguaje") #aniadir a errores Lexicos
-                    self.__estado=0
-                    self.__lexema=""
+                    self.nuevoToken("Error",actual,fila,columna)
                     columna+=1
                     i+=1
             elif self.__estado == 1:#Estado para palabras reservadas
@@ -68,8 +92,12 @@ class analizador:
                     print("Letra")
                     i+=1
                 else:
-                    self.__estado = 0 #Aceptarmos la letra (Comprobar si es reservada)(estado=0 y lexema ="" añiadir en el método de tokens)
-                    print("Aceptamos la palabra")
+                    if self.palabraReservada(self.__lexema):
+                        self.nuevoToken("Tk_PalabraReservada",self.__lexema,fila,columna) #Aceptarmos la letra (Comprobar si es reservada)(estado=0 y lexema ="" añiadir en el método de tokens)
+                        print("Aceptamos la palabra")
+                    else:
+                        self.__lexema=""
+                        self.__estado = 0
             elif self.__estado == 2:#Estado para numeros
                 if actual.isdigit():
                     self.__lexema+=actual
@@ -82,7 +110,7 @@ class analizador:
                     columna+=1
                     i+=1
                 else:
-                    self.__estado = 0 #Acá aceptamos un número entero
+                    self.nuevoToken("Tk_Numero",self.__lexema,fila,columna)#Acá aceptamos un número entero
                     print("numero entero")
             elif self.__estado == 3:#Estado de cadenas, LNR
                 if actual.isalpha() or actual.isdigit():
@@ -107,7 +135,7 @@ class analizador:
                     columna+=1
                     i+=1
                 elif actual == "\n":#Aceptamos el comentario, revisar (aniadir token)
-                    self.__estado=0
+                    self.nuevoToken("Tk_ComentarioLinea",self.__lexema,fila,columna)
                     print("aceptarmos el comentario")
                 else:
                     self.__lexema+=actual
@@ -116,16 +144,16 @@ class analizador:
             elif self.__estado == 5:
                 if actual == "\"":
                     print("añadir token cadena")
-                    self.__estado = 0
-                    i+=1
+                    self.nuevoToken("Tk_Cadena",self.__lexema,fila,columna)
+                    
                 elif actual == "\'":
                     print("aniadir token de comentario multilinea")
-                    self.__estado =0
-                    i+=1
+                    self.nuevoToken("Tk_ComentarioMultilinea",self.__lexema,fila,columna)
+                    
                 else:
                     print("añadir token de simbolo")
-                    self.__estado =0
-                    i+=1
+                    self.nuevoToken("Tk_Simbolo",self.__lexema,fila,columna)
+                i+=1
             elif self.__estado == 6:
                 if actual=="\'":
                     self.__lexema+=actual
@@ -160,7 +188,7 @@ class analizador:
                     columna+=1
                     i+=1
                 else:
-                    self.__estado=0#aaadir token
+                    self.nuevoToken("Tk_NumeroDecimal",self.__lexema,fila,columna)#aaadir token
                     print("Aceptamos numero decimal")
             elif self.__estado == 10:
                 if actual.isalpha() or actual.isdigit():
@@ -195,3 +223,6 @@ class analizador:
                 else:
                     print("Caracter desconocido")
                     self.__estado=0
+        self.mostrarTokens()
+        self.mostrarErrores()
+        

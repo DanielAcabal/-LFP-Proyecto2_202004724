@@ -2,10 +2,13 @@ import tkinter as tk
 from tkinter import *
 from tkinter import messagebox,filedialog
 from Automata import analizador
+from Reportes import Reporte
 class App:
     def __init__(self,root:tk.Toplevel) -> None:
         #Variables
         self.entrada= ""
+        self.tokens = []
+        self.errores = []
         #Ventana
         root.title("Proyecto 2 - 202004724")
         root.config(bg="skyblue")
@@ -34,9 +37,9 @@ class App:
         menubar.add_cascade(label="Analizar Archivo", menu=editmenu)
             #Reportes
         reportMenu = Menu(menubar, tearoff=0)
-        reportMenu.add_command(label="Reporte de Tokens", command=self.donothing)
-        reportMenu.add_command(label="Reporte de Errores", command=self.donothing)
-        reportMenu.add_command(label="Árbol de Derivación", command=self.donothing)
+        reportMenu.add_command(label="Reporte de Tokens", command=self.reporteTokens)
+        reportMenu.add_command(label="Reporte de Errores", command=self.reporteErrores)
+        reportMenu.add_command(label="Árbol de Derivación", command=self.arbol)
         menubar.add_cascade(label="Reportes", menu=reportMenu)
         root.config(menu=menubar)
 
@@ -70,12 +73,19 @@ class App:
             self.console.insert(INSERT,">>>"+a+"\n")
         analizar = analizador()
         analizar.analizar(text)
-        messagebox.showwarning("OJO","No hay analizador xd")
-    def donothing():
+        self.tokens = analizar.getTokens()
+        self.errores = analizar.getErrores()
+        messagebox.showinfo("OJO","Análisis realizado")
+    def reporteTokens(self):
+        report = Reporte()
+        report.reporteTokens("Tokens",self.tokens)
+    def reporteErrores(self):
+        report = Reporte()
+        report.reporteTokens("Errores",self.errores)
+    def arbol():
         filewin = tk.Toplevel(root)
         button = tk.Button(filewin, text="Do nothing button")
         button.pack()
-
 
 if __name__ == "__main__":
     root = tk.Tk()
