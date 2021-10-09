@@ -6,8 +6,8 @@ class analizador:
         self.__estado =0
         self.__tokens = []
         self.__errores = []
-        self.__simbolo = {"=":"igual",";":"PuntoComa","{":"AbreLlave","[":"AbreCorchete","]":"CierraCorchete","}":"CierraLLave",",":"Coma","(":"AbreParen",")":"CierraParen"}
-        self.__reservada = ["claves","registros","imprimir","imprimirln","conteo","promedio","contarsi","datos","sumar","max","min","exportarReporte"]
+        self.__simbolo = {"=":"Tk_igual",";":"Tk_PuntoyC","{":"Tk_AbreL","[":"Tk_AbreC","]":"Tk_CierraC","}":"Tk_CierraL",",":"Tk_Coma","(":"Tk_AbreP",")":"Tk_CierraP"}
+        self.__reservada = ["claves","registros","imprimir","imprimirln","conteo","promedio","contarsi","datos","sumar","max","min","exportarreporte"]
     def getTokens(self):
         return self.__tokens
     def getErrores(self):
@@ -38,6 +38,7 @@ class analizador:
         i=0
         fila =1
         columna =0
+        tkSimbolo = ""
         while i < len(entrada):
             actual = entrada[i] #actual ya es un caracter
             if self.__estado == 0:#Estado inicial
@@ -63,6 +64,7 @@ class analizador:
                     columna+=1
                     i+=1
                 elif not self.__simbolo.get(actual) == None:#Enviar a estado de símbolos 
+                    tkSimbolo = self.__simbolo.get(actual)
                     self.__lexema+=actual
                     self.__estado=5
                     columna+=1
@@ -93,7 +95,7 @@ class analizador:
                     i+=1
                 else:
                     if self.palabraReservada(self.__lexema):
-                        self.nuevoToken("Tk_PalabraReservada",self.__lexema,fila,columna) #Aceptarmos la letra (Comprobar si es reservada)(estado=0 y lexema ="" añiadir en el método de tokens)
+                        self.nuevoToken("Tk_"+self.__lexema.lower(),self.__lexema,fila,columna) #Aceptarmos la letra (Comprobar si es reservada)(estado=0 y lexema ="" añiadir en el método de tokens)
                         print("Aceptamos la palabra")
                     else:
                         self.__lexema=""
@@ -152,7 +154,7 @@ class analizador:
                     
                 else:
                     print("añadir token de simbolo")
-                    self.nuevoToken("Tk_Simbolo",self.__lexema,fila,columna)
+                    self.nuevoToken(tkSimbolo,self.__lexema,fila,columna)
                 i+=1
             elif self.__estado == 6:
                 if actual=="\'":
@@ -188,7 +190,7 @@ class analizador:
                     columna+=1
                     i+=1
                 else:
-                    self.nuevoToken("Tk_NumeroDecimal",self.__lexema,fila,columna)#aaadir token
+                    self.nuevoToken("Tk_Numero",self.__lexema,fila,columna)#aaadir token
                     print("Aceptamos numero decimal")
             elif self.__estado == 10:
                 if actual.isalpha() or actual.isdigit():

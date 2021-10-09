@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import messagebox,filedialog
 from Automata import analizador
 from Reportes import Reporte
+from Sintactico import Sintactico
 class App:
     def __init__(self,root:tk.Toplevel) -> None:
         #Variables
@@ -75,6 +76,7 @@ class App:
         analizar.analizar(text)
         self.tokens = analizar.getTokens()
         self.errores = analizar.getErrores()
+        sintact = Sintactico(self.tokens)
         messagebox.showinfo("OJO","Análisis realizado")
     def reporteTokens(self):
         report = Reporte()
