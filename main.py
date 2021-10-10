@@ -4,6 +4,7 @@ from tkinter import messagebox,filedialog
 from Automata import analizador
 from Reportes import Reporte
 from Sintactico import Sintactico
+from Gestor import Gestor
 class App:
     def __init__(self,root:tk.Toplevel) -> None:
         #Variables
@@ -69,14 +70,15 @@ class App:
             messagebox.showerror("Error","Error al cargar el archivo")
     def analizar(self):
         text = self.text.get("1.0",END)#Imprime por linneas separado por \n, SUSCEPTIBLE A CAMBIOS POR QUE ES CONSOLA
-        print(text[len(text)-1])#el texto siempre termian con un salto de linea
-        for a in text:
-            self.console.insert(INSERT,">>>"+a+"\n")
+        # print(text[len(text)-1])#el texto siempre termian con un salto de linea
+        # for a in text:
+        #     self.console.insert(INSERT,">>>"+a+"\n")
         analizar = analizador()
         analizar.analizar(text)
         self.tokens = analizar.getTokens()
         self.errores = analizar.getErrores()
         sintact = Sintactico(self.tokens)
+        ges = Gestor(sintact.tokens,self.console)
         messagebox.showinfo("OJO","Análisis realizado")
     def reporteTokens(self):
         report = Reporte()
