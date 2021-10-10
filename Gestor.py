@@ -1,4 +1,5 @@
 from tkinter import *
+from Reportes import Reporte
 class Gestor:
     def __init__(self,tokens,consola) -> None:
         self.__tokens = tokens
@@ -46,6 +47,14 @@ class Gestor:
                 self.contarsi(self.__tokens[i+2].getLexema().replace("\"",""),float(self.__tokens[i+4].getLexema()))
             elif actual.getTipo() == "Tk_datos":
                 self.datos()
+            elif actual.getTipo() == "Tk_sumar":
+                self.suma(self.__tokens[i+2].getLexema().replace("\"",""))
+            elif actual.getTipo() == "Tk_max":
+                self.max(self.__tokens[i+2].getLexema().replace("\"",""))
+            elif actual.getTipo() == "Tk_min":
+                self.min(self.__tokens[i+2].getLexema().replace("\"",""))
+            elif actual.getTipo() == "Tk_exportarreporte":
+                self.reporte(self.__tokens[i+2].getLexema().replace("\"",""))
             
             i+=1
         print(self.__info)
@@ -85,3 +94,35 @@ class Gestor:
                 self.__consola.insert(INSERT,self.__info[i][j]+"\t\t")   
         self.__consola.insert(INSERT,"\n")  
           
+    def suma(self,campo):
+        i=0
+        suma = 0
+        for j in range(len(self.__info[0])):
+            if self.__info[0][j] == campo:
+                i=j
+        for j in range(1,len(self.__info)):
+            suma+= float(self.__info[j][i])
+        self.__consola.insert(INSERT,str(suma)+"\n") 
+    def max(self,campo):
+        i=0
+        max = 0
+        for j in range(len(self.__info[0])):
+            if self.__info[0][j] == campo:
+                i=j
+        for j in range(1,len(self.__info)):
+            if max < float(self.__info[j][i]):
+                max = float(self.__info[j][i])
+        self.__consola.insert(INSERT,str(max)+"\n")  
+    def min(self,campo):
+        i=0
+        for j in range(len(self.__info[0])):
+            if self.__info[0][j] == campo:
+                i=j
+        min = float(self.__info[1][i])
+        for j in range(1,len(self.__info)):
+            if min > float(self.__info[j][i]):
+                min = float(self.__info[j][i])
+        self.__consola.insert(INSERT,str(min)+"\n")
+    def reporte(self,titulo):
+        report = Reporte()
+        report.reporteHTML(titulo,self.__info)
