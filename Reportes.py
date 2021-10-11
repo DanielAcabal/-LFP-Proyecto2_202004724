@@ -23,7 +23,7 @@ class Reporte:
         report.write("""<div class="container"><table class="table">
                                 <thead class="letra">
                                     <tr>
-                                    <th scope="col">Carácter Desconocido</th>
+                                    <th scope="col">Error</th>
                                     <th scope="col">Fila</th>
                                     <th scope="col">Columna</th>
                                     </tr>
@@ -34,7 +34,7 @@ class Reporte:
              report.write("<tr><td>"+str(tok.getLexema())+"</td><td>"+str(tok.getFila())+"</td><td>"+str(tok.getColumna())+"</td></tr>")
         report.write(""" </center></tbody>
                                 </table></div>""")
-    def reporteTokens(self,titulo,tokens):
+    def reporteTokens(self,titulo,tokens,sintactico):
         report = open("Reporte"+titulo+".html","w")
         report.write("<html><head><title>Reporte "+titulo+" </title>"+
         """<style>
@@ -46,7 +46,7 @@ class Reporte:
         .letra{
             color: White;
         }
-        h1{
+        h1, h2{
             color: White;
         }
         </style>
@@ -54,6 +54,9 @@ class Reporte:
         report.write("<body><center><h1>Reporte de "+titulo+" </h1><br>")
         report.write("<br>")
         self.printTableToken(report,tokens)
+        if titulo =="Errores":
+            report.write("<h2>Reporte de "+titulo+" Sintácticos</h2><br>")
+            self.printTableError(report,sintactico)
         report.write("</body></html>")
         report.close()
         webbrowser.open("Reporte"+titulo+".html")

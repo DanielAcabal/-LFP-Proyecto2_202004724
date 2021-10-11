@@ -11,6 +11,7 @@ class App:
         self.entrada= ""
         self.tokens = []
         self.errores = []
+        self.erroresSintacticos=[]
         #Ventana
         root.title("Proyecto 2 - 202004724")
         root.config(bg="skyblue")
@@ -78,14 +79,15 @@ class App:
         self.tokens = analizar.getTokens()
         self.errores = analizar.getErrores()
         sintact = Sintactico(self.tokens)
+        self.erroresSintacticos = sintact.error
         ges = Gestor(sintact.tokens,self.console)
         messagebox.showinfo("OJO","Análisis realizado")
     def reporteTokens(self):
         report = Reporte()
-        report.reporteTokens("Tokens",self.tokens)
+        report.reporteTokens("Tokens",self.tokens,None)
     def reporteErrores(self):
         report = Reporte()
-        report.reporteTokens("Errores",self.errores)
+        report.reporteTokens("Errores",self.errores,self.erroresSintacticos)
     def arbol():
         filewin = tk.Toplevel(root)
         button = tk.Button(filewin, text="Do nothing button")

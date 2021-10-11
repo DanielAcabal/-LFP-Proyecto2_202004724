@@ -4,6 +4,7 @@ class Sintactico:
     def __init__(self,tokens) -> None:
         self.reserved = ["Tk_imprimir","Tk_imprimirln","Tk_promedio","Tk_sumar","Tk_max","Tk_min","Tk_exportarreporte"]
         self.errorSintactico = False
+        self.error =[]
         self.tokens = tokens
         self.tokens.append(token("Tk_Final","*",0,0))
         self.posicion = 0
@@ -12,7 +13,10 @@ class Sintactico:
     def equals(self,tipo):
         if self.actual != tipo:
             self.errorSintactico = True
-            print("Error ;v debe Salir"+str(tipo)+" pero salio"+self.actual)
+            er = self.tokens[self.posicion-1]
+            er.setLexema("Token esperado: "+str(tipo)+", token recivido: "+self.actual)
+            self.error.append(er)
+            print("Token esperado: "+str(tipo)+", token recivido: "+self.actual)
         if self.actual == tipo:
             self.posicion+=1
             self.actual = self.tokens[self.posicion].getTipo()
