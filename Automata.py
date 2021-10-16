@@ -98,8 +98,11 @@ class analizador:
                         self.nuevoToken("Tk_"+self.__lexema.lower(),self.__lexema,fila,columna) #Aceptarmos la letra (Comprobar si es reservada)(estado=0 y lexema ="" añiadir en el método de tokens)
                         print("Aceptamos la palabra")
                     else:
+                        self.nuevoToken("Error",self.__lexema,fila,columna)
                         self.__lexema=""
-                        self.__estado = 0
+                        self.__estado=0
+                        columna+=1
+                        i+=1
             elif self.__estado == 2:#Estado para numeros
                 if actual.isdigit():
                     self.__lexema+=actual

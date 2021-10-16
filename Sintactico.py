@@ -14,8 +14,9 @@ class Sintactico:
         if self.actual != tipo:
             self.errorSintactico = True
             er = self.tokens[self.posicion-1]
-            er.setLexema("Token esperado: "+str(tipo)+", token recivido: "+self.actual)
-            self.error.append(er)
+            a = token(er.getTipo(),er.getLexema(),er.getFila(),er.getColumna())
+            a.setLexema("Token esperado: "+str(tipo)+", token recivido: "+self.actual)
+            self.error.append(a)
             print("Token esperado: "+str(tipo)+", token recivido: "+self.actual)
         if self.actual == tipo:
             self.posicion+=1

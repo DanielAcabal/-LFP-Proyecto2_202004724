@@ -81,6 +81,7 @@ class App:
         sintact = Sintactico(self.tokens)
         self.erroresSintacticos = sintact.error
         ges = Gestor(sintact.tokens,self.console)
+        ges.llenar(sintact.errorSintactico)
         messagebox.showinfo("OJO","Análisis realizado")
     def reporteTokens(self):
         report = Reporte()

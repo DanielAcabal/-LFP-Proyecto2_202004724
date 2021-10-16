@@ -6,58 +6,61 @@ class Gestor:
         self.__info = []
         self.__consola = consola
         self.cant = 0
-        self.llenar()
+        
 
-    def llenar(self):
-        i=0
-        while i<len(self.__tokens):
-            actual = self.__tokens[i]
-            if actual.getTipo() == "Tk_claves":
-                campos = []
-                i+=3
+    def llenar(self,error):
+        if not error:
+            i=0
+            while i<len(self.__tokens):
                 actual = self.__tokens[i]
-                while actual.getTipo()!="Tk_CierraC":
-                    if actual.getTipo() != "Tk_Coma":
-                        campos.append(actual.getLexema().replace("\"","").strip())
-                    i+=1
+                if actual.getTipo() == "Tk_claves":
+                    campos = []
+                    i+=3
                     actual = self.__tokens[i]
-                self.__info.append(campos)
-            elif actual.getTipo() == "Tk_registros":
-                registro = []
-                i+=4
-                actual = self.__tokens[i]
-                while actual.getTipo()!="Tk_CierraC":
-                    if actual.getTipo() != "Tk_Coma" and actual.getTipo() != "Tk_CierraL" and actual.getTipo() != "Tk_AbreL":
-                        registro.append(actual.getLexema().replace("\"","").strip())
-                    if actual.getTipo() == "Tk_CierraL":
-                        self.__info.append(registro)
-                        self.cant+=1
-                        registro = []
-                    i+=1
+                    while actual.getTipo()!="Tk_CierraC":
+                        if actual.getTipo() != "Tk_Coma":
+                            campos.append(actual.getLexema().replace("\"","").strip())
+                        i+=1
+                        actual = self.__tokens[i]
+                    self.__info.append(campos)
+                elif actual.getTipo() == "Tk_registros":
+                    registro = []
+                    i+=4
                     actual = self.__tokens[i]
-            elif actual.getTipo() == "Tk_imprimir":
-                self.imprimir(self.__tokens[i+2].getLexema().replace("\"",""))
-            elif actual.getTipo() == "Tk_imprimirln":
-                self.imprimirln(self.__tokens[i+2].getLexema().replace("\"",""))
-            elif actual.getTipo() == "Tk_conteo":
-                self.conteo()
-            elif actual.getTipo() == "Tk_promedio":
-                self.promedio(self.__tokens[i+2].getLexema().replace("\"",""))
-            elif actual.getTipo() == "Tk_contarsi":
-                self.contarsi(self.__tokens[i+2].getLexema().replace("\"",""),float(self.__tokens[i+4].getLexema()))
-            elif actual.getTipo() == "Tk_datos":
-                self.datos()
-            elif actual.getTipo() == "Tk_sumar":
-                self.suma(self.__tokens[i+2].getLexema().replace("\"",""))
-            elif actual.getTipo() == "Tk_max":
-                self.max(self.__tokens[i+2].getLexema().replace("\"",""))
-            elif actual.getTipo() == "Tk_min":
-                self.min(self.__tokens[i+2].getLexema().replace("\"",""))
-            elif actual.getTipo() == "Tk_exportarreporte":
-                self.reporte(self.__tokens[i+2].getLexema().replace("\"",""))
-            
-            i+=1
-        print(self.__info)
+                    while actual.getTipo()!="Tk_CierraC":
+                        if actual.getTipo() != "Tk_Coma" and actual.getTipo() != "Tk_CierraL" and actual.getTipo() != "Tk_AbreL":
+                            registro.append(actual.getLexema().replace("\"","").strip())
+                        if actual.getTipo() == "Tk_CierraL":
+                            self.__info.append(registro)
+                            self.cant+=1
+                            registro = []
+                        i+=1
+                        actual = self.__tokens[i]
+                elif actual.getTipo() == "Tk_imprimir":
+                    self.imprimir(self.__tokens[i+2].getLexema().replace("\"",""))
+                elif actual.getTipo() == "Tk_imprimirln":
+                    self.imprimirln(self.__tokens[i+2].getLexema().replace("\"",""))
+                elif actual.getTipo() == "Tk_conteo":
+                    self.conteo()
+                elif actual.getTipo() == "Tk_promedio":
+                    self.promedio(self.__tokens[i+2].getLexema().replace("\"",""))
+                elif actual.getTipo() == "Tk_contarsi":
+                    self.contarsi(self.__tokens[i+2].getLexema().replace("\"",""),float(self.__tokens[i+4].getLexema()))
+                elif actual.getTipo() == "Tk_datos":
+                    self.datos()
+                elif actual.getTipo() == "Tk_sumar":
+                    self.suma(self.__tokens[i+2].getLexema().replace("\"",""))
+                elif actual.getTipo() == "Tk_max":
+                    self.max(self.__tokens[i+2].getLexema().replace("\"",""))
+                elif actual.getTipo() == "Tk_min":
+                    self.min(self.__tokens[i+2].getLexema().replace("\"",""))
+                elif actual.getTipo() == "Tk_exportarreporte":
+                    self.reporte(self.__tokens[i+2].getLexema().replace("\"",""))
+                
+                i+=1
+            print(self.__info)
+        else:
+            self.__consola.insert(INSERT,"\nSyntaxError: invalid syntax\nRevisar reporte de errores")
     def imprimir(self,cadena):
         self.__consola.insert(INSERT,cadena)
     def imprimirln(self,cadena):
