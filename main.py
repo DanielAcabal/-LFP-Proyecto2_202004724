@@ -80,8 +80,8 @@ class App:
         self.errores = analizar.getErrores()
         sintact = Sintactico(self.tokens)
         self.erroresSintacticos = sintact.error
-        ges = Gestor(sintact.tokens,self.console)
-        ges.llenar(sintact.errorSintactico)
+        self.ges = Gestor(sintact.tokens,self.console)
+        self.ges.llenar(sintact.errorSintactico)
         messagebox.showinfo("OJO","Análisis realizado")
     def reporteTokens(self):
         report = Reporte()
@@ -89,10 +89,8 @@ class App:
     def reporteErrores(self):
         report = Reporte()
         report.reporteTokens("Errores",self.errores,self.erroresSintacticos)
-    def arbol():
-        filewin = tk.Toplevel(root)
-        button = tk.Button(filewin, text="Do nothing button")
-        button.pack()
+    def arbol(self):
+        self.ges.reporteArbol()
 
 if __name__ == "__main__":
     root = tk.Tk()
